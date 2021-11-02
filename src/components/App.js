@@ -1,10 +1,12 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import AddContact from "./AddContact";
 import Header from "./Header";
 import { uuid } from "uuidv4";
 import "semantic-ui-css/semantic.min.css";
-
-const ContactList = lazy(() => import("./ContactList"));
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ContactList from "./ContactList";
+import Details from "./Detail";
+// const ContactList = lazy(() => import("./ContactList"));
 
 function App() {
   const LOCAL_STORAGE_KEY = "contacts";
@@ -38,23 +40,52 @@ function App() {
       className="ui fluid container"
       style={{ margin: "auto", border: "6px" }}
     >
-      <div className="App">
+      <Router>
         <Header />
-        <AddContact addContactHandler={addContactHandler} />
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={(props) => (
+              <ContactList
+                {...props}
+                contacts={contacts}
+                getContactId={removeHandler}
+              />
+            )}
+            // component={() => (
+            //   <ContactList contacts={contacts} getContactId={removeHandler} />
+            // )}
+          />
+          <Route
+            path="/add"
+            exact
+            render={(props) => (
+              <AddContact {...props} addContactHandler={addContactHandler} />
+            )}
+            // component={() => (
+            //   <AddContact addContactHandler={addContactHandler} />
+            // )}
+          />
+          <Route path="/contact/:id" component={Details} />
+          exact
+        </Switch>
+
+        {/* <AddContact addContactHandler={addContactHandler} />
         <h4 className="ui horizontal divider header">
           <i className="tag icon"></i>
           Contact List
         </h4>
         <Suspense
           fallback={
-            <div class="ui active inverted dimmer">
-              <div class="ui text loader">Loading</div>
+            <div className="ui active inverted dimmer">
+              <div className="ui text loader">Loading</div>
             </div>
           }
         >
           <ContactList contacts={contacts} getContactId={removeHandler} />
-        </Suspense>
-      </div>
+        </Suspense> */}
+      </Router>
     </div>
   );
 }
