@@ -3,10 +3,12 @@ import AddContact from "./AddContact";
 import Header from "./Header";
 import { uuid } from "uuidv4";
 import "semantic-ui-css/semantic.min.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import ContactList from "./ContactList";
 import Details from "./Detail";
-// const ContactList = lazy(() => import("./ContactList"));
+import history from "./history";
+import setting from "./setting";
+import help from "./help";
 
 function App() {
   const LOCAL_STORAGE_KEY = "contacts";
@@ -29,7 +31,7 @@ function App() {
       localStorage.getItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts))
     );
     if (retriveContacts) setContacts(retriveContacts);
-  }, []);
+  }, [setContacts]);
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
@@ -40,7 +42,7 @@ function App() {
       className="ui fluid container"
       style={{ margin: "auto", border: "6px" }}
     >
-      <Router>
+      <Router basename="/contact">
         <Header />
         <Switch>
           <Route
@@ -67,8 +69,10 @@ function App() {
             //   <AddContact addContactHandler={addContactHandler} />
             // )}
           />
-          <Route path="/contact/:id" component={Details} />
-          exact
+          <Route path="/contact/:id" component={Details} exact />
+          <Route path="/history" component={history} exact />
+          <Route path="/setting" component={setting} exact />
+          <Route path="/help" component={help} exact />
         </Switch>
 
         {/* <AddContact addContactHandler={addContactHandler} />

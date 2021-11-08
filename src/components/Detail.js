@@ -8,6 +8,10 @@ const Details = (props) => {
   console.log(props);
   return (
     <div className="main">
+      <h3 className="ui horizontal divider header">
+        <i className="address book icon"></i>
+        Contact Details
+      </h3>
       <div className="ui centered card">
         <div className="image">
           <img src={profilePic} alt="user" />
@@ -31,6 +35,14 @@ const Details = (props) => {
           </div>
         </div>
       </Link>
+      <div className="ui center aligned container" style={{ margin: "10px" }}>
+        <div class="ui animated inverted blue button" tabindex="0">
+          <div class="visible content">Call</div>
+          <div class="hidden content">
+            <i class="call icon"></i>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
