@@ -1,5 +1,5 @@
 # Demo of project
-https://practical-bassi-151eb7.netlify.app
+https://nifty-wiles-96ef8e.netlify.app
 
 # Getting Started with Create React App
 
