@@ -10,10 +10,12 @@ import history from "./history";
 import setting from "./setting";
 import help from "./help";
 import api from "./../api/contacts";
+import EditContact from "./editContact";
 
 function App() {
-  // const LOCAL_STORAGE_KEY = "contacts";
   const [contacts, setContacts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   //retrive contacts using api request
   const retriveContacts = async () => {
@@ -21,6 +23,21 @@ function App() {
     return response.data;
   };
 
+  const searchHandler = (searchTerm) => {
+    // console.log(searchTerm);
+    setSearchTerm(searchTerm);
+    if (searchTerm !== "") {
+      const newContactList = contacts.filter((contact) => {
+        return Object.values(contact)
+          .join("")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+      });
+      setSearchResult(newContactList);
+    } else {
+      setSearchResult(contacts);
+    }
+  };
   const addContactHandler = async (contact) => {
     console.log(contact);
 
@@ -32,6 +49,17 @@ function App() {
     const response = await api.post("/contacts", request);
     setContacts([...contacts, response.data]);
     // setContacts([...contacts, { id: uuid(), ...contact }]);
+  };
+
+  const editContactHandler = async (contact) => {
+    const response = await api.put(`/contacts/${contact.id}`, contact);
+
+    const { id, firstName, lastName, phone, email, message } = response.data;
+    setContacts(
+      contacts.map((contact) => {
+        return contact.id === id ? { ...response.data } : contact;
+      })
+    );
   };
 
   const removeHandler = async (id) => {
@@ -57,9 +85,9 @@ function App() {
     // if (retriveContacts) setContacts(retriveContacts);
   }, []);
 
-  useEffect(() => {
-    // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
+  // }, [contacts]);
 
   return (
     <div
@@ -68,6 +96,7 @@ function App() {
     >
       <Router>
         <Header />
+
         <Switch>
           <Route
             path="/"
@@ -75,7 +104,9 @@ function App() {
             render={(props) => (
               <ContactList
                 {...props}
-                contacts={contacts}
+                contacts={searchTerm.length < 1 ? contacts : searchResult}
+                term={searchTerm}
+                searchKeyword={searchHandler}
                 getContactId={removeHandler}
               />
             )}
@@ -89,9 +120,17 @@ function App() {
             render={(props) => (
               <AddContact {...props} addContactHandler={addContactHandler} />
             )}
+
             // component={() => (
             //   <AddContact addContactHandler={addContactHandler} />
             // )}
+          />
+          <Route
+            path="/edit"
+            exact
+            render={(props) => (
+              <EditContact {...props} editContactHandler={editContactHandler} />
+            )}
           />
           <Route path="/contact/:id" component={Details} exact />
           <Route path="/history" component={history} exact />

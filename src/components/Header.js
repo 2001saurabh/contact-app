@@ -2,7 +2,7 @@ import React from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Link } from "react-router-dom";
 
-function Header() {
+function Header(props) {
   return (
     <div className="ui segment" style={{ backgroundColor: "#8050DE" }}>
       <h2 className="ui center aligned  header" style={{ color: "#f2f2f2" }}>
@@ -19,21 +19,6 @@ function Header() {
             <i className="add icon" />
             Add Contacts
           </Link>
-
-          <div class="ui right  menu">
-            <div class="ui category search item">
-              <div class="ui transparent icon input">
-                <input
-                  class="prompt"
-                  type="text"
-                  placeholder="Search contact..."
-                  style={{ width: "600px" }}
-                />
-                <i class="search link icon"></i>
-              </div>
-              <div class="results"></div>
-            </div>
-          </div>
 
           <div class="right menu">
             <div class="ui simple dropdown item">

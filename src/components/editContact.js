@@ -1,56 +1,60 @@
-import React, { Suspense } from "react";
+import React from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Link } from "react-router-dom";
-import { Form, Button } from "semantic-ui-react";
 
-class AddContact extends React.Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    message: "",
-    tabIndex: "",
-  };
+class EditContact extends React.Component {
+  // state = {
+  //   firstName: "",
+  //   lastName: "",
+  //   phone: "",
+  //   email: "",
+  //   message: "",
+  //   tabIndex: "",
+  // };
+  constructor(props) {
+    super(props);
+    const { id, firstName, lastName, phone, message, email } =
+      props.location.state.contact;
+    this.state = {
+      id: id,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      message: message,
+    };
+  }
 
-  add = (e) => {
+  update = (e) => {
     e.preventDefault();
     if (
       this.state.firstName === "" ||
       this.state.lastName === "" ||
       this.state.email === "" ||
       this.state.phone === "" ||
-      this.state.message === "" ||
-      this.state.tabIndex === ""
+      this.state.message === ""
     ) {
       alert("All the fields are mandatory");
       return;
     }
-    this.props.addContactHandler(this.state);
+    this.props.editContactHandler(this.state);
     this.setState({
       firstName: "",
       lastName: "",
       email: "",
       message: "",
       phone: "",
-      tabIndex: 0,
     });
-    alert("Contact Saved");
+    alert("Contact Updated");
     this.props.history.push("/");
   };
 
   render() {
     return (
-      <Suspense
-        fallback={
-          <div className="ui active inverted dimmer">
-            <div className="ui text loader">Loading</div>
-          </div>
-        }
-      >
+      <>
         <h3 className="ui horizontal divider header">
-          <i className="edit outline icon"></i>
-          Add Contact
+          <i className="edit  icon"></i>
+          Edit Contact
         </h3>
         <Link to="/">
           <div className="ui left aligned container">
@@ -64,7 +68,7 @@ class AddContact extends React.Component {
         </Link>
 
         <div className="ui left aligned container">
-          <form className="ui form success" onSubmit={this.add}>
+          <form className="ui form success" onSubmit={this.update}>
             <div className="field">
               <label>First Name</label>
               <input
@@ -120,34 +124,15 @@ class AddContact extends React.Component {
                 ></textarea>
               </div>
             </div>
-
-            <Form.Field>
-              <label>File input & upload for dataschemas & datasources</label>
-              <input type="file" onChange={this.fileChange} />
-              <div class="ui purple inverted progress">
-                <div class="bar">
-                  <div class="progress"></div>
-                </div>
+            {/* <div class="ui placeholder segment">
+              <div class="ui icon header">
+                <i class="pdf file outline icon"></i>
+                No documents are listed for this customer.
               </div>
-              <Button className="ui right aligned green inverted button">
-                Upload
-              </Button>
-            </Form.Field>
+              <div class="ui primary button">Add Document</div>
+            </div> */}
 
-            <div className="field">
-              <div className="ui checkbox">
-                <input
-                  type="checkbox"
-                  tabIndex={this.state.tabIndex}
-                  onChange={(e) =>
-                    this.setState({ tabIndex: e.target.tabIndex })
-                  }
-                />
-                <label>I agree to the Terms and Conditions</label>
-              </div>
-            </div>
-
-            <button className="ui blue inverted button">Add To Contact</button>
+            <button className="ui blue inverted button">Update Contact</button>
 
             {/* <div class="ui success message">
             <div class="header">Contact Added Sucessfully</div>
@@ -155,9 +140,9 @@ class AddContact extends React.Component {
           </div> */}
           </form>
         </div>
-      </Suspense>
+      </>
     );
   }
 }
 
-export default AddContact;
+export default EditContact;

@@ -48,11 +48,26 @@ const ContactCard = (props) => {
           </div>
 
           <div className="ui right floated ">
+            <Link
+              to={{
+                pathname: `/edit`,
+                state: { contact: props.contact },
+              }}
+            >
+              <button
+                className="ui blue right labeled icon button"
+                style={{ margin: "10px" }}
+              >
+                <i className="edit alternate outline icon"></i>
+                Edit
+              </button>
+            </Link>
+
             <button
               className="ui red right labeled icon button"
               onClick={() => props.clickHandler(id)}
             >
-              <i className="trash icon"></i>
+              <i className="trash alternate outline icon"></i>
               Remove
             </button>
           </div>
